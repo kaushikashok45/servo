@@ -812,11 +812,13 @@ impl HTMLInputElement {
             InputType::Radio => {
                 let mut is_required = self.Required();
                 let mut is_checked = self.Checked();
+                let mut is_group_name_present = self.radio_group_name().is_some();
                 for other in radio_group_iter(self, self.radio_group_name().as_ref()) {
                     is_required = is_required || other.Required();
                     is_checked = is_checked || other.Checked();
+                    is_group_name_present = other.radio_group_name().is_some();
                 }
-                is_required && !is_checked
+                is_required && !is_checked && is_group_name_present
             },
             // https://html.spec.whatwg.org/multipage/#file-upload-state-(type%3Dfile)%3Asuffering-from-being-missing
             InputType::File => {
